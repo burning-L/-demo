@@ -5,6 +5,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from "path";
 import {viteMockServe} from "vite-plugin-mock";
+import svgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfigExport => {
@@ -12,6 +13,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     plugins: [
       vue(),
       vueDevTools(),
+      svgr(),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]',
