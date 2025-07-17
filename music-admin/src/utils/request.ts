@@ -1,6 +1,7 @@
 // 二次封装axios
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import useUserStore from "@/stores/modules/user.ts";
 // import useUserStore from '@/store/modules/user'
 const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -9,11 +10,11 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
-    // const userStore = useUserStore()
-    //
-    // if (userStore.token) {
-    //   config.headers.token = userStore.token
-    // }
+    const userStore = useUserStore()
+    console.log('Current Token:', userStore.token)
+    if (userStore.token) {
+      config.headers.token = userStore.token
+    }
     return config
   },
   (error) => {
