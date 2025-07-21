@@ -75,5 +75,9 @@ role-path-permissions:
       - "/comment/"
       - "/banner/"
       - "/feedback/"
-
+minio:
+  endpoint: http://192.168.2.35:9000  # 修改你的 MinIO 端点
+  accessKey: admin # 修改你的 MinIO Access Key
+  secretKey: 123456789 # 修改你的 MinIO Secret Key
+  bucket: music-project # 确认 Bucket 名称与你创建的一致
 

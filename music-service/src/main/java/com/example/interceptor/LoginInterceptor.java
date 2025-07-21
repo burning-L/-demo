@@ -89,7 +89,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             Map<String, Object> claims = JwtUtil.parseToken(token);
             String role = (String) claims.get(JwtClaimsConstant.ROLE);
             String requestURI = request.getRequestURI();
-
+            System.out.println("requestURI"+requestURI);
             if (rolePermissionManager.hasPermission(role, requestURI)) {
                 // 把业务数据存储到ThreadLocal中  存储和获取当前用户信息（如登录用户身份、角色、token 等），
                 // 确保在整个业务逻辑链中可以随时获取这些数据。主要是做为后面业务信息做判断

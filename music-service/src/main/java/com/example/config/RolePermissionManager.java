@@ -9,10 +9,11 @@ import java.util.Map;
 /**
  * 角色权限管理器
  */
-    @Component
-    public class RolePermissionManager {
+@Component
+public class RolePermissionManager {
 
         private final RolePathPermissionsConfig rolePathPermissionsConfig;
+
 
         @Autowired
         public RolePermissionManager(RolePathPermissionsConfig rolePathPermissionsConfig) {
@@ -32,5 +33,5 @@ import java.util.Map;
             }
             return false;
         }
-    }
+}
 

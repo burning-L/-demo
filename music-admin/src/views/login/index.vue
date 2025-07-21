@@ -4,9 +4,8 @@ import User from "@iconify-icons/ri/user-3-fill";
 import { bg, avatar, illustration} from "./utils/static";
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
-import {reactive, Ref, ref, toRaw} from "vue";
+import {onMounted, reactive, Ref, ref, toRaw} from "vue";
 import {useRenderIcon} from "@/components/Relcon/src/hooks.ts";
-import Motion from "./utils/motion";
 import { Warning } from '@element-plus/icons-vue'
 import Identify from '@/components/VerifyCode/index.vue'
 import useUserStore from "@/stores/modules/user.ts";
@@ -17,8 +16,8 @@ import { getTime } from '@/utils/time'
 
 let loginForms = ref()
 const loginForm = reactive({
-  username: "admin_1",
-  password: "as123456789",
+  username: "admin",
+  password: "123456",
   verifyCode: '1234',
 });
 /** 用户名正则（用户名格式应为4-16位字母、数字、下划线、连字符的任意组合） */
@@ -42,6 +41,10 @@ const makeCode = (o: Ref<any>, l: number) => {
       identifyCodes.value[randomNum(0, identifyCodes.value.length)]
   }
 }
+// 页面加载时生成验证码
+// onMounted(() => {
+//   refreshCode()
+// })
 const randomNum = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
@@ -89,6 +92,8 @@ const login=async ()=>{
     await useStore.userLogin(loginForm)
     let redirect: string = $route.query.redirect as string
     $router.push({ path: redirect || '/' })
+    // ✅ 确保 token 已更新
+    console.log('Token after login:', useStore.token)
     ElNotification({
       type: 'success',
       message: '登陆成功',
@@ -124,12 +129,9 @@ const login=async ()=>{
       <div class="login-box">
         <div class="login-form">
           <img src="../../assets/login/avatar.svg" class="avatar" />
-          <Motion>
             <h2 class="outline-none">主题</h2>
-          </Motion>
           <el-form :model="loginForm" ref="loginForms" :rules="loginRules" size="large">
-            <Motion :delay="100">
-              <el-form-item prop="username">
+              <el-form-item prop="username" style="margin-top: 10px">
                 <el-input
                   v-model="loginForm.username"
                   clearable
@@ -137,9 +139,7 @@ const login=async ()=>{
                   :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
-            </Motion>
-            <Motion :delay="150">
-              <el-form-item prop="password">
+              <el-form-item prop="password" style="margin-top: 10px">
                 <el-input
                   v-model="loginForm.password"
                   clearable
@@ -148,9 +148,7 @@ const login=async ()=>{
                   :prefix-icon="useRenderIcon(Lock)"
                 />
               </el-form-item>
-            </Motion>
-            <Motion :delay="150">
-              <el-form-item prop="verifyCode">
+              <el-form-item prop="verifyCode" style="margin-top: 10px">
                 <el-input
                   :prefix-icon="Warning"
                   show-password
@@ -163,9 +161,7 @@ const login=async ()=>{
                     <Identify :identifyCode="identifyCode" @click="refreshCode" />
                   </template>
                 </el-input>
-              </el-form-item>
-            </Motion>
-            <Motion :delay="250">
+              </el-form-item >
               <el-button
                 class="w-full mt-4"
                 size="default"
@@ -175,7 +171,6 @@ const login=async ()=>{
               >
                 登录
               </el-button>
-            </Motion>
           </el-form>
         </div>
       </div>

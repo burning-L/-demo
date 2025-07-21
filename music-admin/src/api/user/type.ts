@@ -10,17 +10,7 @@ export interface ResponseData {
   ok?: boolean
 }
 
-// export type LoginResponseData = {
-//   code: number
-//   message?: string
-//   ok?: boolean
-//   data?: string
-// }
-
-export type LoginResponseData = {
-  code: number
-  message?: string
-  ok?: boolean
+export interface LoginResponseData extends ResponseData {
   data?: string
 }
 
