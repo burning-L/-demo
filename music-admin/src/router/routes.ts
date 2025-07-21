@@ -31,6 +31,16 @@ export const constantRoute = [
     ],
   },
   {
+    path: '/screen',
+    component: () => import('@/views/screen/index.vue'),
+    name: 'Screen',
+    meta: {
+      title: 'Screen',
+      hidden: false,
+      icon: 'Platform',
+    },
+  },
+  {
     path: '/404',
     component: () => import('@/views/404/index.vue'),
     name: '404',
@@ -50,6 +60,19 @@ export const asyncRoute = [
       hidden: false,
       icon: 'Lock',
     },
+    redirect: '/acl/user',
+    children: [
+      {
+        path: '/acl/user',
+        component: () => import('@/views/acl/user/index.vue'),
+        name: 'User',
+        meta: {
+          title: '用户管理',
+          hidden: false,
+          icon: 'User',
+        },
+      },
+    ]
   },
   {
     path: '/product',

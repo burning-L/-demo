@@ -17,7 +17,7 @@ let userStore = useUserStore()
     </div>
   </el-card>
   <div class="bottom">
-    <def-svg-icon name="welcome" width="600px" height="300px"></def-svg-icon>
+    <svg-icon name="welcome" width="600px" height="300px"></svg-icon>
   </div>
 </template>
 <style lang="scss" scoped>

@@ -92,8 +92,6 @@ const login=async ()=>{
     await useStore.userLogin(loginForm)
     let redirect: string = $route.query.redirect as string
     $router.push({ path: redirect || '/' })
-    // ✅ 确保 token 已更新
-    console.log('Token after login:', useStore.token)
     ElNotification({
       type: 'success',
       message: '登陆成功',
