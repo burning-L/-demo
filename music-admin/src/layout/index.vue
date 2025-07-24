@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import Logo from './logo/index.vue'
-import { useRoute } from 'vue-router'
-import useLayOutSettingStore from '@/stores/modules/setting'
-import useUserStore from "@/stores/modules/user.ts";
 import Menu from './menu/index.vue'
 import TabBar from './tabbar/index.vue'
 import Main from './main/index.vue'
-let $route = useRoute()
+import useLayOutSettingStore from '@/stores/modules/setting'
+import useUserStore from '@/stores/modules/user'
+import { useRoute } from 'vue-router'
+
 let userStore = useUserStore()
+let $route = useRoute()
+
 let LayOutSettingStore = useLayOutSettingStore()
 </script>
 <template>

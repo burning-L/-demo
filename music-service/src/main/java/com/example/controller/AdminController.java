@@ -73,7 +73,17 @@ public class AdminController {
      */
     @PostMapping("/logout")
     public Result logout(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // 去掉 "Bearer " 前缀
+        }
         return adminService.logout(token);
+    }
+    @GetMapping("/info")
+    public Result info(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        return adminService.info(token);
     }
 
 
@@ -218,6 +228,7 @@ public class AdminController {
      */
     @PatchMapping("/updateArtistAvatar/{id}")
     public Result updateArtistAvatar(@PathVariable("id") Long artistId, @RequestParam("avatar") MultipartFile avatar) {
+        System.out.println("进入 updateArtistAvatar，artistId: " + artistId);
         String avatarUrl = minioService.uploadFile(avatar, "artists");  // 上传到 artists 目录
         return artistService.updateArtistAvatar(artistId, avatarUrl);
     }

@@ -133,7 +133,8 @@ const trademarkList = [
   {
     id: 1,
     tmName: 'Apple',
-    logoUrl: 'https://example.com/apple-logo.png',
+    logoUrl: 'http://192.168.2.35:9000/music-project/songCovers/515b75af-c9f2-441f-b317-1e7136178a65-12345.png',
+    audioUrl:'http://192.168.2.35:9000/music-project/songs/52617eeb-ac38-475b-93dd-4565363d017e-356596524 (1).mp3'
   },
   {
     id: 2,
@@ -236,7 +237,7 @@ const skuList = [
 export default [
   // 获取一级分类
   {
-    url: '/admin/product/getCategory1',
+    url: '/api/admin/product/getCategory1',
     method: 'get',
     response: () => {
       return {
@@ -247,7 +248,7 @@ export default [
   },
   // 获取二级分类
   {
-    url: '/admin/product/getCategory2/:category1Id',
+    url: '/api/admin/product/getCategory2/:category1Id',
     method: 'get',
     response: (request) => {
       const category1Id = Number(request.url.split('/').pop())
@@ -259,7 +260,7 @@ export default [
   },
   // 获取三级分类
   {
-    url: '/admin/product/getCategory3/:category2Id',
+    url: '/api/admin/product/getCategory3/:category2Id',
     method: 'get',
     response: (request) => {
       const category2Id = Number(request.url.split('/').pop())
@@ -271,7 +272,7 @@ export default [
   },
   // 获取属性列表
   {
-    url: '/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id',
+    url: '/api/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id',
     method: 'get',
     response: () => {
       return {
@@ -282,7 +283,7 @@ export default [
   },
   // 添加/更新属性
   {
-    url: '/admin/product/saveAttrInfo',
+    url: '/api/admin/product/saveAttrInfo',
     method: 'post',
     response: ({ body }) => {
       if (body.id) {
@@ -305,7 +306,7 @@ export default [
   },
   // 删除属性
   {
-    url: '/admin/product/deleteAttr/:attrId',
+    url: '/api/admin/product/deleteAttr/:attrId',
     method: 'delete',
     response: (request) => {
       const attrId = Number(request.url.split('/').pop())
@@ -322,7 +323,7 @@ export default [
   },
   // 获取SPU列表
   {
-    url: '/admin/product/:page/:limit',
+    url: '/api/admin/product/:page/:limit',
     method: 'get',
     response: ({ query, params }) => {
       const { category3Id } = query
@@ -351,7 +352,7 @@ export default [
   },
   // 获取品牌列表
   {
-    url: '/admin/product/baseTrademark/getTrademarkList',
+    url: '/api/admin/product/baseTrademark/getTrademarkList',
     method: 'get',
     response: () => {
       return {
@@ -362,7 +363,7 @@ export default [
   },
   // 获取SPU图片列表
   {
-    url: '/admin/product/spuImageList/:spuId',
+    url: '/api/admin/product/spuImageList/:spuId',
     method: 'get',
     response: (request) => {
       const spuId = Number(request.url.split('/').pop())
@@ -378,7 +379,7 @@ export default [
   },
   // 获取SPU销售属性
   {
-    url: '/admin/product/spuSaleAttrList/:spuId',
+    url: '/api/admin/product/spuSaleAttrList/:spuId',
     method: 'get',
     response: (request) => {
       const spuId = Number(request.url.split('/').pop())
@@ -394,7 +395,7 @@ export default [
   },
   // 获取所有销售属性
   {
-    url: '/admin/product/baseSaleAttrList',
+    url: '/api/admin/product/baseSaleAttrList',
     method: 'get',
     response: () => {
       return {
@@ -411,7 +412,7 @@ export default [
   },
   // 添加/更新SPU
   {
-    url: '/admin/product/saveSpuInfo',
+    url: '/api/admin/product/saveSpuInfo',
     method: 'post',
     response: ({ body }) => {
       if (body.id) {
@@ -463,7 +464,7 @@ export default [
   },
   // 更新SPU
   {
-    url: '/admin/product/updateSpuInfo',
+    url: '/api/admin/product/updateSpuInfo',
     method: 'post',
     response: ({ body }) => {
       const index = productList.findIndex((item) => item.id === body.id)
@@ -495,7 +496,7 @@ export default [
   },
   // 添加SKU
   {
-    url: '/admin/product/saveSkuInfo',
+    url: '/api/admin/product/saveSkuInfo',
     method: 'post',
     response: ({ body }) => {
       const newSku = {
@@ -515,7 +516,7 @@ export default [
   },
   // 获取SKU列表
   {
-    url: '/admin/product/list/:page/:limit',
+    url: '/api/admin/product/list/:page/:limit',
     method: 'get',
     response: ({ params }) => {
       const page = Number(params?.page) || 1
@@ -540,7 +541,7 @@ export default [
   },
   // 上架SKU
   {
-    url: '/admin/product/onSale/:skuId',
+    url: '/api/admin/product/onSale/:skuId',
     method: 'get',
     response: (request) => {
       const skuId = Number(request.url.split('/').pop())
@@ -557,7 +558,7 @@ export default [
   },
   // 下架SKU
   {
-    url: '/admin/product/cancelSale/:skuId',
+    url: '/api/admin/product/cancelSale/:skuId',
     method: 'get',
     response: (request) => {
       const skuId = Number(request.url.split('/').pop())
@@ -574,7 +575,7 @@ export default [
   },
   // 获取SKU详情
   {
-    url: '/admin/product/getSkuInfo/:skuId',
+    url: '/api/admin/product/getSkuInfo/:skuId',
     method: 'get',
     response: (request) => {
       const skuId = Number(request.url.split('/').pop())
@@ -587,7 +588,7 @@ export default [
   },
   // 删除SKU
   {
-    url: '/admin/product/deleteSku/:skuId',
+    url: '/api/admin/product/deleteSku/:skuId',
     method: 'delete',
     response: (request) => {
       const skuId = Number(request.url.split('/').pop())
@@ -604,7 +605,7 @@ export default [
   },
   // 删除SPU
   {
-    url: '/admin/product/deleteSpu/:spuId',
+    url: '/api/admin/product/deleteSpu/:spuId',
     method: 'delete',
     response: (request) => {
       const spuId = Number(request.url.split('/').pop())
@@ -622,7 +623,7 @@ export default [
   },
   // 获取品牌列表
   {
-    url: '/admin/product/baseTrademark/:page/:limit',
+    url: '/api/admin/product/baseTrademark/:page/:limit',
     method: 'get',
     response: () => {
       return {
@@ -642,7 +643,7 @@ export default [
   },
   // 添加品牌
   {
-    url: '/admin/product/baseTrademark/save',
+    url: '/api/admin/product/baseTrademark/save',
     method: 'post',
     response: ({ body }) => {
       trademarkList.push({
@@ -659,7 +660,7 @@ export default [
   },
   // 更新品牌
   {
-    url: '/admin/product/baseTrademark/update',
+    url: '/api/admin/product/baseTrademark/update',
     method: 'put',
     response: ({ body }) => {
       const index = trademarkList.findIndex((item) => item.id === body.id)
@@ -676,7 +677,7 @@ export default [
   },
   // 删除品牌
   {
-    url: '/admin/product/baseTrademark/remove/:id',
+    url: '/api/admin/product/baseTrademark/remove/:id',
     method: 'delete',
     response: (request) => {
       const id = Number(request.url.split('/').pop())
@@ -692,4 +693,16 @@ export default [
       }
     },
   },
+  {
+    url: '/api/admin/product/fileUpload',
+    method: 'post',
+    response: () => {
+      return {
+        code: 200,
+        message: 'success',
+        data: "http://192.168.2.35:9000/music-project/songs/52617eeb-ac38-475b-93dd-4565363d017e-356596524 (1).mp3"
+      }
+    }
+  },
+
 ]

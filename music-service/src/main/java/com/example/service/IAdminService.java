@@ -22,4 +22,6 @@ public interface IAdminService extends IService<Admin> {
 
     // 退出登录
     Result logout(String token);
+
+    Result info(String token);
 }

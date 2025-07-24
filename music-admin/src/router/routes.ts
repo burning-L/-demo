@@ -40,6 +40,29 @@ export const constantRoute = [
       icon: 'Platform',
     },
   },
+  // {
+  //   path: '/',
+  //   component: () => import('@/layout/index.vue'),
+  //   name: 'layout',
+  //   meta: {
+  //     title: '',
+  //     hidden: false,
+  //     icon: '',
+  //   },
+  //   redirect: '/product/sku',
+  //   children: [
+  //     {
+  //       path: '/product/sku',
+  //       component: () => import('@/views/product/sku/index.vue'),
+  //       name: 'Sku',
+  //       meta: {
+  //         title: 'Sku',
+  //         icon: 'ScaleToOriginal',
+  //         hidden: false,
+  //       },
+  //     },
+  //   ]
+  // },
   {
     path: '/404',
     component: () => import('@/views/404/index.vue'),
@@ -75,15 +98,50 @@ export const asyncRoute = [
     ]
   },
   {
-    path: '/product',
+    path: '/',
     component: () => import('@/layout/index.vue'),
     name: 'Product',
     meta: {
-      title: '商品管理',
+      title: '',
       hidden: false,
-      icon: 'Goods',
+      icon: '',
     },
-  }
+    redirect: '/artist',
+    children: [
+      {
+        path: '/artist',
+        component: () => import('@/views/product/trademark/index.vue'),
+        name: 'Trademark',
+        meta: {
+          title: '歌曲管理',
+          icon: 'ShoppingCart',
+          hidden: false,
+        },
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: () => import('@/layout/index.vue'),
+    name: 'Song',
+    meta: {
+      title: '',
+      hidden: false,
+      icon: '',
+    },
+    children: [
+      {
+        path: '/song',
+        component: () => import('@/views/product/sku/index.vue'),
+        name: 'SongSku',
+        meta: {
+          title: '歌曲管理',
+          icon: 'ScaleToOriginal',
+          hidden: false,
+        },
+      },
+    ]
+  },
 ]
 
 export const anyRoute = {

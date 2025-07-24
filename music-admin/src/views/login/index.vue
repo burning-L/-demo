@@ -16,8 +16,8 @@ import { getTime } from '@/utils/time'
 
 let loginForms = ref()
 const loginForm = reactive({
-  username: "admin",
-  password: "123456",
+  username: "admin_1",
+  password: "as123456789",
   verifyCode: '1234',
 });
 /** 用户名正则（用户名格式应为4-16位字母、数字、下划线、连字符的任意组合） */

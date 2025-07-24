@@ -6,12 +6,13 @@ const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000,
 })
-
+//请求拦截器：在请求发送前 “预处理” 请求配置，常用于添加认证、统一参数等
 request.interceptors.request.use(
   (config) => {
     const userStore = useUserStore()
     if (userStore.token) {
-      config.headers.token = userStore.token
+      // config.headers.token = userStore.token
+      config.headers.Authorization = `Bearer ${userStore.token}`
     }
 
     return config
@@ -20,7 +21,7 @@ request.interceptors.request.use(
     return Promise.reject(error)
   },
 )
-
+//响应拦截器：在响应返回后 “后处理” 数据，常用于错误处理、数据格式化等
 request.interceptors.response.use(
   (response) => {
     if (response.status === 200) {

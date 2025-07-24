@@ -8,6 +8,7 @@ import com.example.enumeration.RoleEnum;
 import com.example.mapper.AdminMapper;
 import com.example.mode.dto.AdminDTO;
 import com.example.mode.entity.Admin;
+import com.example.mode.vo.AdminInfoVO;
 import com.example.result.Result;
 import com.example.service.IAdminService;
 import com.example.util.JwtUtil;
@@ -16,8 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -88,5 +88,30 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         } else {
             return Result.error(MessageConstant.LOGOUT + MessageConstant.FAILED);
         }
+    }
+
+    @Override
+    public Result info(String token) {
+        if (stringRedisTemplate.hasKey(token)) {
+            Map<String, Object> claims = JwtUtil.parseToken(token);
+            String username = (String) claims.get(JwtClaimsConstant.USERNAME);
+            String role = (String) claims.get(JwtClaimsConstant.ROLE);
+            AdminInfoVO  adminInfoVO = new AdminInfoVO();
+            adminInfoVO.setName(username);
+            List<String> roles = new ArrayList<>();
+            roles.add(role);
+            adminInfoVO.setRoles(roles);
+            List<String> routes = Arrays.asList(
+                    "home", "Acl", "User", "Role", "Permission",
+                    "Product", "Trademark", "Attr", "Song", "SongSku"
+            );
+            List<String> buttons = new ArrayList<>();
+            buttons.add("btn.Trademark.add");
+            adminInfoVO.setButtons(buttons);
+            adminInfoVO.setRoutes(routes);
+            adminInfoVO.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+            return Result.success("获取用户信息成功",adminInfoVO);
+        }
+        return Result.error("获取用户信息失败，token无效或已过期");
     }
 }

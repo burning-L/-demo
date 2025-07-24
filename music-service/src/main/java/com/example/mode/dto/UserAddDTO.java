@@ -45,7 +45,7 @@ public class UserAddDTO implements Serializable {
      * 用户邮箱
      */
     @NotBlank(message = MessageConstant.EMAIL + MessageConstant.NOT_NULL)
-    @Email(message = MessageConstant.EMAIL + MessageConstant.FORMAT_ERROR)
+    @Email(message = MessageConstant.EMAIL + MessageConstant.FORMAT_ERROR + "11")
     private String email;
 
     /**

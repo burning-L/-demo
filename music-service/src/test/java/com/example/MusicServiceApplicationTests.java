@@ -12,7 +12,8 @@ class MusicServiceApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(DigestUtils.md5DigestAsHex("as123456789".getBytes()));
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?:\\.[a-zA-Z]{2,})?$";
+        System.out.println("2212155@qq.com".matches(regex));
     }
 
 }

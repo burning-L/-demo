@@ -7,6 +7,7 @@ import type {
   AllRoleResponseData,
   AllRole,
   SetRoleData,
+  UserQueryParams
 } from '@/api/acl/user/type'
 import {
   reqUserInfo,
@@ -34,8 +35,9 @@ let drawer = ref<boolean>(false)
 let drawer1 = ref<boolean>(false)
 let userParams = reactive<User>({
   username: '',
-  name: '',
+  phone: '',
   password: '',
+  email:'',
 })
 
 const checkAll = ref<boolean>(false)
@@ -53,11 +55,11 @@ const validatorUserName = (rule: any, value: any, callBack: any) => {
   }
 }
 
-const validatorName = (rule: any, value: any, callBack: any) => {
-  if (value.trim().length >= 5) {
+const validatorPhone = (rule: any, value: any, callBack: any) => {
+  if (value.trim().length >= 11) {
     callBack()
   } else {
-    callBack(new Error('用户昵称至少五位'))
+    callBack(new Error('用户昵称至少十一位'))
   }
 }
 
@@ -68,10 +70,21 @@ const validatorPassword = (rule: any, value: any, callBack: any) => {
     callBack(new Error('用户密码至少六位'))
   }
 }
+const validatorEmail = (rule: any, value: any, callback: any) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!value) {
+    callback(new Error('请输入邮箱')); // 检查是否为空
+  } else if (!emailRegex.test(value.trim())) {
+    callback(new Error('请输入正确的邮箱格式')); // 检查格式
+  } else {
+    callback(); // 验证通过
+  }
+}
 const rules = {
   username: [{ required: true, trigger: 'blur', validator: validatorUserName }],
-  name: [{ required: true, trigger: 'blur', validator: validatorName }],
+  phone: [{ required: true, trigger: 'blur', validator: validatorPhone }],
   password: [{ required: true, trigger: 'blur', validator: validatorPassword }],
+  email: [{ required: true, trigger: 'blur', validator: validatorEmail }],
 }
 //刷新页面获取数据
 onMounted(() => {
@@ -79,14 +92,15 @@ onMounted(() => {
 })
 const getHasUser = async (pager = 1) => {
   pageNo.value = pager
-  let res: UserResponseData = await reqUserInfo(
-    pageNo.value,
-    pageSize.value,
-    keyword.value,
+  let res: UserResponseData = await reqUserInfo({
+    "pageNum":pageNo.value,
+    "pageSize":pageSize.value,
+    "username":keyword.value,
+    }
   )
   if (res.code === 200) {
     total.value = res.data.total
-    userArr.value = res.data.records
+    userArr.value = res.data.items
   }
 }
 
@@ -104,16 +118,18 @@ const addUser = () => {
   drawer.value = true
   // 重置 userParams 表单数据
   Object.assign(userParams, {
-    id: 0,
+    userStatus:1,
     username: '',
-    name: '',
+    phone: '',
     password: '',
+    email:'',
   })
   // 在 DOM 更新后清除校验提示
   nextTick(() => {
     formRef.value.clearValidate('username')
-    formRef.value.clearValidate('name')
+    formRef.value.clearValidate('phone')
     formRef.value.clearValidate('password')
+    formRef.value.clearValidate('email')
   })
 }
 const cancel = () => {
@@ -126,7 +142,7 @@ const save = async () => {
     drawer.value = false
     ElMessage({
       type: 'success',
-      message: userParams.id ? '更新成功' : '添加成功',
+      message: userParams.userId ? '更新成功' : '添加成功',
     })
     setTimeout(() => {
       window.location.reload()
@@ -135,14 +151,14 @@ const save = async () => {
     drawer.value = false
     ElMessage({
       type: 'error',
-      message: userParams.id ? '更新失败' : '添加失败',
+      message: userParams.userId ? '更新失败' : '添加失败',
     })
   }
 }
 const deleteSelectUser = async () => {
   try {
     let idList: any = selectIdArr.value.map((item) => {
-      return item.id
+      return item.userId
     })
     let res: any = await reqSelectUser(idList)
     if (res.code === 200) {
@@ -158,7 +174,7 @@ const deleteSelectUser = async () => {
 const setRole = async (row: User) => {
   drawer1.value = true
   Object.assign(userParams, row)
-  let res: AllRoleResponseData = await reqAllRole(userParams.id as number)
+  let res: AllRoleResponseData = await reqAllRole(userParams.userId as number)
   if (res.code === 200) {
     allRole.value = res.data.allRolesList
     userRole.value = res.data.assignRoles
@@ -167,7 +183,7 @@ const setRole = async (row: User) => {
 }
 const confirmClick = async () => {
   let data: SetRoleData = {
-    userId: userParams.id as number,
+    userId: userParams.userId as number,
     roleIdList: userRole.value.map((item) => {
       return item.id as number
     }),
@@ -199,6 +215,7 @@ const updateUser = (row: User) => {
   nextTick(() => {
     formRef.value.clearValidate('username')
     formRef.value.clearValidate('name')
+    formRef.value.clearValidate('phone')
   })
 }
 const deleteUser = async (userId: number) => {
@@ -207,6 +224,9 @@ const deleteUser = async (userId: number) => {
     ElMessage({ type: 'success', message: '删除成功' })
     getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1)
   }
+}
+const handler = () => {
+  getHasUser()
 }
 </script>
 <template>
@@ -250,7 +270,7 @@ const deleteUser = async (userId: number) => {
     >
       <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="#" align="center" type="index"></el-table-column>
-      <el-table-column label="id" align="center" prop="id"></el-table-column>
+      <el-table-column label="id" align="center" prop="userId"></el-table-column>
       <el-table-column
         label="用户名字"
         align="center"
@@ -258,15 +278,15 @@ const deleteUser = async (userId: number) => {
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
-        label="用户名称"
+        label="电话"
         align="center"
-        prop="name"
+        prop="phone"
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
-        label="用户角色"
+        label="邮箱"
         align="center"
-        prop="roleName"
+        prop="email"
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
@@ -297,7 +317,7 @@ const deleteUser = async (userId: number) => {
           <el-popconfirm
             :title="`你确定删除${row.username}`"
             width="260px"
-            @confirm="deleteUser(row.id)"
+            @confirm="deleteUser(row.userId)"
           >
             <template #reference>
               <el-button type="danger" size="small" icon="Delete">
@@ -316,14 +336,14 @@ const deleteUser = async (userId: number) => {
       :background="true"
       layout="prev, pager, next, jumper, -> , sizes, total"
       :total="total"
-      @current-change=""
-      @size-change=""
+      @current-change="getHasUser"
+      @size-change="handler"
     />
   </el-card>
 <!--抽屉弹窗组件  drawer为true打开-->
   <el-drawer v-model="drawer">
     <template #header>
-      <h4>{{ userParams.id ? '更新用户' : '添加用户' }}</h4>
+      <h4>{{ userParams.userId ? '更新用户' : '添加用户' }}</h4>
     </template>
     <template #default>
       <el-form :model="userParams" :rules="rules" ref="formRef">
@@ -333,16 +353,28 @@ const deleteUser = async (userId: number) => {
             v-model="userParams.username"
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="name">
-          <el-input
-            placeholder="请您输入用户昵称"
-            v-model="userParams.name"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用户密码" prop="password" v-if="!userParams.id">
+        <el-form-item label="用户密码" prop="password" v-if="!userParams.userId">
           <el-input
             placeholder="请您输入用户密码"
             v-model="userParams.password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用户电话" prop="phone">
+          <el-input
+            placeholder="请您输入用户电话"
+            v-model="userParams.phone"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用户邮箱" prop="email">
+          <el-input
+            placeholder="请您输入用户邮箱"
+            v-model="userParams.email"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用户状态" prop="userStatus" v-if="!userParams.userId" required>
+          <el-input
+            placeholder="请您输入用户状态"
+            v-model="userParams.userStatus"
           ></el-input>
         </el-form-item>
       </el-form>

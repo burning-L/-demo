@@ -12,12 +12,14 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/index.scss'
 import './permission'
 import pinia from './stores'
+import { isHasButton } from './directive/has'
 
 
 
 
 
 const app = createApp(App)
+isHasButton(app)
 app.use(ElementPlus)
 app.use(router)
 app.use(pinia)

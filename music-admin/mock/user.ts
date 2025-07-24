@@ -60,7 +60,7 @@ export default [
             avatar:
               'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
             roles: ['admin'],
-            buttons: ['cuser.detail'],
+            buttons: ['btn.Trademark.add'],
             routes: [
               'home',
               'Acl',
@@ -72,6 +72,7 @@ export default [
               'Attr',
               'Spu',
               'Sku',
+              'sku1',
             ],
           },
           message: '获取用户信息成功',
